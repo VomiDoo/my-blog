@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  useHistory,
+} from "react-router-dom";
 import Main from "./components/Main";
 import LoginWindow from "./components/LoginWindow";
 import Posts from "./components/Posts";
@@ -17,6 +21,8 @@ function App() {
       About: "woof",
     }
   );
+  const history = useHistory();
+  console.log(history);
 
   const { toggle, theme } = useContext(themeContext);
 
@@ -26,6 +32,7 @@ function App() {
 
   const loginHeadler = () => {
     setOpenLogin(true);
+    history.push("/auth")
   };
 
   const logoutHendler = () => {
@@ -33,24 +40,25 @@ function App() {
   };
 
   return (
-    <Router>
       <div className={`wrap ${theme}`}>
         <div className={`container ${theme}`}>
           <div className={`header ${theme}`}>
             <button className={`header_theme ${theme}`} onClick={toggle}>
               Theme
             </button>
-            <Link to="/posts">
-              <button className={`header_btn ${theme}`}>Posts</button>
-            </Link>
-            <Link to="/auth">
-              <button
-                className={`header_btn ${theme}`}
-                onClick={guest ? loginHeadler : logoutHendler}
-              >
-                {guest ? "LogIn" : "LogOut"}
-              </button>
-            </Link>
+
+            <button
+              className={`header_btn ${theme}`}
+              onClick={() => (history.push("/posts"))}
+            >
+              Posts
+            </button>
+            <button
+              className={`header_btn ${theme}`}
+              onClick={guest ? loginHeadler : logoutHendler}
+            >
+              {guest ? "LogIn" : "LogOut"}
+            </button>
           </div>
           <Main
             status={guest}
@@ -64,7 +72,6 @@ function App() {
             </Route>
             <Route path="/auth">
               <LoginWindow
-                nameClass={openLogin ? "login-open" : "login-close"}
                 guest={guest}
                 setGuest={setGuest}
                 setOpenLogin={setOpenLogin}
@@ -73,7 +80,6 @@ function App() {
           </Switch>
         </div>
       </div>
-    </Router>
   );
 }
 

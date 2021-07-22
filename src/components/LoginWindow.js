@@ -1,12 +1,14 @@
 import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { themeContext } from "./context";
+import { useHistory} from "react-router";
 
-const LoginWindow = ({ nameClass, setGuest, setOpenLogin }) => {
+const LoginWindow = ({ setGuest, setOpenLogin }) => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { theme } = useContext(themeContext);
+  const history = useHistory()
 
   const userLogin = { login: "vomidoo", password: "1q2w3e" };
   localStorage.setItem("userLogin", JSON.stringify(userLogin));
@@ -26,6 +28,7 @@ const LoginWindow = ({ nameClass, setGuest, setOpenLogin }) => {
       setLogin("");
       setPassword("");
       setError("");
+      history.push("/")
     } else if (userLogin.login !== login || userLogin.password !== password) {
       setError("Wrong login or password");
     }
@@ -36,6 +39,7 @@ const LoginWindow = ({ nameClass, setGuest, setOpenLogin }) => {
     setLogin("");
     setPassword("");
     setError("");
+    history.push("/")
   };
 
   function handleKeyPress(event) {
@@ -45,7 +49,7 @@ const LoginWindow = ({ nameClass, setGuest, setOpenLogin }) => {
   }
 
   return (
-    <div className={nameClass}>
+    <div className="login-open">
       <div className={`login-blur ${theme}`}></div>
       <div className={`login ${theme}`}>
         <p className="login_error">{error}</p>
