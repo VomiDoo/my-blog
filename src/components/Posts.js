@@ -4,13 +4,14 @@ import { v4 as uuidv4 } from "uuid";
 import { format } from "date-fns";
 import NewPost from "./NewPost";
 import { themeContext } from "./context";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { addPost } from "../reducers/postSlice";
 
 const Posts = ({ guest, userInform }) => {
   const [value, setValue] = useState("");
-  const [posts, setPosts] = useState(
-    JSON.parse(localStorage.getItem("posts")) || []
-  );
+
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.posts.posts)
 
   const { theme } = useContext(themeContext);
 
@@ -18,9 +19,9 @@ const Posts = ({ guest, userInform }) => {
     localStorage.setItem("posts", JSON.stringify(posts));
   };
 
-  useEffect(() => {
-    savePosts();
-  }, [value, posts]);
+  // useEffect(() => {
+  //   savePosts();
+  // }, [value, posts]);
 
   const changeHandler = ({ target }) => {
     setValue(target.value);
@@ -28,7 +29,7 @@ const Posts = ({ guest, userInform }) => {
 
   const clickHandler = () => {
     let today = format(new Date(), "dd.MM.yyyy");
-    posts.unshift({ value, status: guest, today, id: uuidv4() });
+    dispatch(addPost({ value, status: guest, today, id: uuidv4() }));
     setValue("");
   };
 
@@ -56,7 +57,6 @@ const Posts = ({ guest, userInform }) => {
               index={index}
               value={item.value}
               posts={posts}
-              setPosts={setPosts}
               guest={guest}
               status={item.status}
               nickname={userInform.Nickname}

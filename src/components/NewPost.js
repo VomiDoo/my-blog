@@ -1,21 +1,16 @@
 import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { themeContext } from "./context";
+import { deletePost, editPost } from "../reducers/postSlice";
+import { useSelector, useDispatch } from "react-redux";
 
-const NewPost = ({
-  value,
-  status,
-  guest,
-  nickname,
-  today,
-  posts,
-  setPosts,
-  index,
-}) => {
+const NewPost = ({ value, status, guest, nickname, today, index }) => {
   const [editValue, setEditValue] = useState("");
   const [edit, setEdit] = useState(false);
-  const itemIndex = index;
   const { theme } = useContext(themeContext);
+
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.posts.posts);
 
   const editHandler = () => {
     setEdit(true);
@@ -27,9 +22,7 @@ const NewPost = ({
 
   const acceptHandler = () => {
     if (editValue && editValue !== " ") {
-      const newPosts = posts.slice();
-      newPosts[index] = { value: editValue, status, today };
-      setPosts(newPosts);
+      dispatch(editPost({ editValue, index }));
       setEdit(false);
       setEditValue("");
     }
@@ -40,12 +33,8 @@ const NewPost = ({
     setEditValue("");
   };
 
-  function deleteHandler() {
-    setPosts(posts.filter((item, index) => index !== itemIndex));
-  }
-
   return (
-      <div className={`post ${theme}`}>
+    <div className={`post ${theme}`}>
       <div className={status ? "post_img guest" : "post_img user"}></div>
       <div className="post_inform">
         <p className="post_nickname">{status ? "Guest" : nickname}</p>
@@ -72,7 +61,10 @@ const NewPost = ({
                   <button className="post__edit-btn" onClick={editHandler}>
                     ✎
                   </button>
-                  <button className="post_delete" onClick={deleteHandler}>
+                  <button
+                    className="post_delete"
+                    onClick={() => dispatch(deletePost(index))}
+                  >
                     🗑️
                   </button>
                 </>
@@ -92,8 +84,6 @@ NewPost.propTypes = {
   guest: PropTypes.bool,
   nickname: PropTypes.string,
   today: PropTypes.string,
-  posts: PropTypes.array,
-  setPosts: PropTypes.func,
   index: PropTypes.number,
 };
 
