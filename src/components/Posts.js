@@ -19,7 +19,7 @@ const Posts = ({ guest, userInform }) => {
 
   useEffect(() => {
     savePosts();
-  }, [value, posts]);
+  }, [posts]);
 
   const changeHandler = ({ target }) => {
     setValue(target.value);
@@ -27,7 +27,7 @@ const Posts = ({ guest, userInform }) => {
 
   const clickHandler = () => {
     let today = format(new Date(), "dd.MM.yyyy");
-    posts.unshift({ value, status: guest, today, id: uuidv4() });
+    setPosts([{ value, status: guest, today, id: uuidv4() }, ...posts]);
     setValue("");
   };
 

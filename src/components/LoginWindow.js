@@ -8,8 +8,7 @@ const LoginWindow = ({ nameClass, setGuest, setOpenLogin }) => {
   const [error, setError] = useState("");
   const { theme } = useContext(themeContext);
 
-  const userLogin = { login: "vomidoo", password: "1q2w3e" };
-  localStorage.setItem("userLogin", JSON.stringify(userLogin));
+  const userLogin = (JSON.parse(localStorage.getItem("userLogin")))
 
   const loginHandler = ({ target }) => {
     setLogin(target.value);

@@ -10,11 +10,10 @@ const NewPost = ({
   today,
   posts,
   setPosts,
-  index,
+  index: itemIndex,
 }) => {
   const [editValue, setEditValue] = useState("");
   const [edit, setEdit] = useState(false);
-  const itemIndex = index;
   const { theme } = useContext(themeContext);
 
   const editHandler = () => {
@@ -28,7 +27,7 @@ const NewPost = ({
   const acceptHandler = () => {
     if (editValue && editValue !== " ") {
       const newPosts = posts.slice();
-      newPosts[index] = { value: editValue, status, today };
+      newPosts[itemIndex] = { value: editValue, status, today };
       setPosts(newPosts);
       setEdit(false);
       setEditValue("");

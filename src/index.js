@@ -5,6 +5,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Theme } from './components/context';
 
+const userLogin = { login: "vomidoo", password: "1q2w3e" };
+localStorage.setItem("userLogin", JSON.stringify(userLogin));
+
 ReactDOM.render(
   <Theme>
     <App />
